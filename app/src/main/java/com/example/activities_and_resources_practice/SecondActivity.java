@@ -5,23 +5,32 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+import com.example.activities_and_resources_practice.databinding.ActivitySecondBinding;
 
 public class SecondActivity extends AppCompatActivity {
-    public static final String TAG = SecondActivity.class.getSimpleName();
+    private static final String TAG = SecondActivity.class.getSimpleName();
+    private ActivitySecondBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_second);
+
+        binding.finish.setOnClickListener(v ->{
+            Log.d(TAG, "setting result in second activity");
+            Intent intent = new Intent();
+            intent.putExtra(Constants.DATA_KEY ,"result : John Snow");
+            setResult(RESULT_OK,intent);
+            finish();
+        });
 
     }
 
     @Override
     public boolean isFinishing() {
         Log.d(TAG, "second activity is finishing");
-        Intent intent = new Intent();
-        intent.putExtra(Constants.DATA_KEY ,"John Snow");
-        setResult(RESULT_OK);
         return super.isFinishing();
     }
 }

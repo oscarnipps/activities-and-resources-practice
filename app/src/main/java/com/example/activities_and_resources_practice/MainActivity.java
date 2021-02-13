@@ -12,7 +12,7 @@ import com.example.activities_and_resources_practice.databinding.ActivityMainBin
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
-    public ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +20,15 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         binding.proceed.setOnClickListener(v -> {
-            Intent intent = new Intent(this , SecondActivity.class);
-            startActivityForResult(intent,Constants.MAIN_ACTIVITY_REQUEST_CODE);
+            Intent intent = new Intent(MainActivity.this , SecondActivity.class);
+            startActivityForResult(intent,2);
+        });
+
+        binding.viewDetails.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
+            //pass the first user
+            intent.putExtra(Constants.USER_DATA_KEY ,UserRepo.getUsers().get(0));
+            startActivity(intent);
         });
     }
 
@@ -29,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Constants.MAIN_ACTIVITY_REQUEST_CODE) {
+        Log.d(TAG, "request code : " + requestCode);
+        Log.d(TAG, "result code : " + resultCode);
+
+        if (requestCode == 2) {
 
             if (resultCode == RESULT_OK) {
 
@@ -39,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-
-            Log.d(TAG, "result not okay");
 
         }
     }
