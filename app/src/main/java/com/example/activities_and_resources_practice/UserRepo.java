@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepo {
-
     public static UserRepo mInstance;
 
     public static UserRepo getInstance() {
@@ -14,7 +13,7 @@ public class UserRepo {
         return mInstance;
     }
 
-    public static List<User> getUsers() {
+    public List<User> getUsers() {
         List<User> users = new ArrayList<>();
         users.add(new User("john doe","Male",20));
         users.add(new User("sarah jones","Female",30));

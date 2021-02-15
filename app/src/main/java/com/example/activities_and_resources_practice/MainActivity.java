@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -13,11 +14,17 @@ import com.example.activities_and_resources_practice.databinding.ActivityMainBin
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding binding;
+    private UserRepo userRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        userRepo = UserRepo.getInstance();
+
+        //add lifecycle observer to monitor lifecycle changes in this component (activity / fragment)
+        getLifecycle().addObserver(new Utils());
 
         binding.proceed.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this , SecondActivity.class);
@@ -27,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         binding.viewDetails.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
             //pass the first user
-            intent.putExtra(Constants.USER_DATA_KEY ,UserRepo.getUsers().get(0));
+            intent.putExtra(Constants.USER_DATA_KEY ,userRepo.getUsers().get(0));
             startActivity(intent);
         });
     }
@@ -51,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
