@@ -2,6 +2,8 @@ package com.example.activities_and_resources_practice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding binding;
     private UserRepo userRepo;
+    private String userInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +30,28 @@ public class MainActivity extends AppCompatActivity {
         getLifecycle().addObserver(new Utils());
 
         binding.proceed.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this , SecondActivity.class);
-            startActivityForResult(intent,2);
+            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+            startActivityForResult(intent, 2);
         });
 
         binding.viewDetails.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
+            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
             //pass the first user
-            intent.putExtra(Constants.USER_DATA_KEY ,userRepo.getUsers().get(0));
+            intent.putExtra(Constants.USER_DATA_KEY, userRepo.getUsers().get(0));
             startActivity(intent);
+        });
+
+        binding.input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable input) {
+                userInput = input.toString().trim();
+            }
         });
     }
 
@@ -62,7 +78,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        //save the user input or other related data
+        outState.putString(Constants.USER_INPUT_KEY, userInput);
+
+        //always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(outState);
+        Log.d(TAG, "on saveInstanceStateCalled");
+    }
+
+    //this is called after onStart() method only if the bundle is not empty/null (no need to check for nulls)
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        //always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        //get the data from the bundle and restore the necessary views
     }
 
     @Override
