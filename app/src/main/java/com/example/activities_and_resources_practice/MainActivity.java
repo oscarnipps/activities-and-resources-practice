@@ -22,6 +22,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            //get the data from the bundle and restore the necessary views
+            String restoredValue = savedInstanceState.getString(Constants.USER_INPUT_KEY);
+
+            Log.d(TAG, "value from savedInstanceState : " + restoredValue);
+        }
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         userRepo = UserRepo.getInstance();
@@ -36,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
 
         binding.viewDetails.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+
             //pass the first user
             intent.putExtra(Constants.USER_DATA_KEY, userRepo.getUsers().get(0));
+
             startActivity(intent);
         });
 
@@ -60,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.d(TAG, "request code : " + requestCode);
+
         Log.d(TAG, "result code : " + resultCode);
 
         if (requestCode == 2) {
@@ -78,12 +89,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        //always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(outState);
+
+        Log.d(TAG, "onSaveInstanceState");
+
         //save the user input or other related data
         outState.putString(Constants.USER_INPUT_KEY, userInput);
 
-        //always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(outState);
-        Log.d(TAG, "on saveInstanceStateCalled");
+        Log.d(TAG, "value saved before onSaveInstanceState : " + userInput);
     }
 
     //this is called after onStart() method only if the bundle is not empty/null (no need to check for nulls)
@@ -92,43 +106,48 @@ public class MainActivity extends AppCompatActivity {
         //always call the superclass so it can restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
 
+        Log.d(TAG, "onRestoreInstanceState");
+
         //get the data from the bundle and restore the necessary views
+        String restoredValue = savedInstanceState.getString(Constants.USER_INPUT_KEY);
+
+        Log.d(TAG, "value from savedInstanceState : " + restoredValue);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "on start");
+        Log.d(TAG, "onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "on resume");
+        Log.d(TAG, "onResume");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.d(TAG, "on re-start");
+        Log.d(TAG, "onRestart");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "on pause");
+        Log.d(TAG, "onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG, "on stop");
+        Log.d(TAG, "onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "on destroy");
+        Log.d(TAG, "onDestroy");
     }
 
 }
