@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        userRepo = UserRepo.getInstance();
+        //userRepo = UserRepo.getInstance();
 
         //add lifecycle observer to monitor lifecycle changes in this component (activity / fragment)
         getLifecycle().addObserver(new Utils());
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
 
             //pass the first user
-            intent.putExtra(Constants.USER_DATA_KEY, userRepo.getUsers().get(0));
+            intent.putExtra(Constants.USER_DATA_KEY, UserRepo.getUsers().get(1));
 
             startActivity(intent);
         });
